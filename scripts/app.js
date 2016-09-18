@@ -1,0 +1,169 @@
+adminSlide = function () {
+    var flight = getNextflight();
+    $('#remTime').text('00:00');
+    $('#flightNo').text(flight.name);
+    $('#flightArrival').text(flight.arrival);
+    currentTimer = window.setInterval(timer, 1000);
+};
+
+timer = function () {
+    var arrival = $('#flightArrival').text().split(':');
+    var now = new Date(Date.now());
+    arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
+    var minutesToArrival = (arrival.getTime() - now.getTime()) / 60000;
+
+    if (minutesToArrival > 0) {
+        var countDown = MillisecondsToDuration(arrival.getTime() - now.getTime());
+        countDown = countDown.substring(2, countDown.length).split('.')[0];
+        $('#remTime').text(countDown);
+
+    } else if (minutesToArrival >= -1 && minutesToArrival <= 0) {
+        if (currentTimer) {
+            window.clearInterval(currentTimer);
+        }
+        var audio = new Audio('audio/alarm.mp3');
+        audio.play();
+        window.setTimeout(function () {
+            audio.pause();
+            audio.currentTime = 0;
+            var flight = getNextflight();
+            $('#remTime').text('00:00');
+            $('#flightNo').text(flight.name);
+            $('#flightArrival').text(flight.arrival);
+            var currentTimer = window.setInterval(timer, 1000);
+        }, 20000);
+    } else if (minutesToArrival < -2) {
+        arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, arrival[0], arrival[1], 0, 0);
+        var countDown = MillisecondsToDuration(arrival.getTime() - now.getTime());
+        countDown = countDown.substring(2, countDown.length).split('.')[0];
+        $('#remTime').text(countDown);
+    }
+};
+//Convert duration from milliseconds to 0000:00:00.00 format
+function MillisecondsToDuration(n) {
+    var hms = "";
+    var dtm = new Date();
+    dtm.setTime(n);
+    var h = "000" + Math.floor(n / 3600000);
+    var m = "0" + dtm.getMinutes();
+    var s = "0" + dtm.getSeconds();
+    var cs = "0" + Math.round(dtm.getMilliseconds() / 10);
+    hms = h.substr(h.length - 4) + ":" + m.substr(m.length - 2) + ":";
+    hms += s.substr(s.length - 2) + "." + cs.substr(cs.length - 2);
+    return hms;
+}
+
+getNextflight = function () {
+    var now = new Date(Date.now());
+    var current = -1;
+    $.each(flights, function (index, value) {
+        var arrival = value.arrival.split(':');
+        arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
+        if (arrival.getTime() - now.getTime() > 0) {
+            current = value;
+            return false;
+        }
+    });
+    if (current == -1) {
+        current = flights[0];
+    }
+    return current;
+}
+
+bosSlide = function () {
+    //Chart Bootstrap
+    var ctx = document.getElementById("chart").getContext("2d");
+    window.myLine = new Chart(ctx, config);
+    if ($('#tmPrgrs tr:first td:first').text() == 'Name') {
+        $.each(resources, function (index, value) {
+            var tempRow = $('<tr />').insertBefore($('#tmPrgrs tr:last'));
+            console.log(value);
+            tempRow.append($('<td />').text(value.name));
+            tempRow.append($('<td />').text(value.remaining));
+        });
+        $('#tmPrgrs tr:first').remove();
+    }
+};
+
+bayanSlide = function () {
+
+};
+
+var randomScalingFactor = function () {
+    return Math.round(Math.random() * 4);//* (Math.random() > 0.5 ? -1 : 1));
+};
+var randomColorFactor = function () {
+    return Math.round(Math.random() * 255);
+};
+var randomColor = function (opacity) {
+    return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+};
+
+var perfectArr = [];
+$.each(chartConfigurations.xAxis.points, function (i, label) {
+    perfectArr.push(chartConfigurations.threshold.value);
+});
+var config = {
+    type: 'line',
+    data: {
+        labels: chartConfigurations.xAxis.points,
+        datasets: [{
+            label: chartConfigurations.chartLabel,
+            data: chartConfigurations.data,
+            fill: false,
+            borderDash: [5, 5],
+        }, {
+                label: chartConfigurations.threshold.label,
+                data: perfectArr,
+                fill: false,
+                radius: 0,
+                backgroundColor: "rgba(0,0,0,0.1)"
+            }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            position: 'bottom',
+        },
+        hover: {
+            mode: 'label'
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: chartConfigurations.xAxis.label
+                }
+            }],
+            yAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: chartConfigurations.yAxis.label
+                },
+                ticks: {
+                    max: chartConfigurations.yAxis.max,
+                    min: chartConfigurations.yAxis.min,
+                    stepSize: chartConfigurations.yAxis.step
+                }
+            }]
+        },
+        title: {
+            display: true,
+            text: 'BOS'
+        }
+    }
+};
+
+
+
+$.each(config.data.datasets, function (i, dataset) {
+    var background = randomColor(0.5);
+    dataset.borderColor = background;
+    dataset.backgroundColor = background;
+    dataset.pointBorderColor = background;
+    dataset.pointBackgroundColor = background;
+    dataset.pointBorderWidth = 1;
+});

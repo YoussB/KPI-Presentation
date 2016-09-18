@@ -1,0 +1,25 @@
+{
+  "name": "kpi-presentation",
+  "version": "1.0.0",
+  "description": "an application for monitoring team KPIs in addition to other stuff.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YoussB/KPI-Presentation.git"
+  },
+  "author": "YoussB (byoussef1991@gmail.com)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/YoussB/KPI-Presentation/issues"
+  },
+  "homepage": "https://github.com/YoussB/KPI-Presentation#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "chart.js": "^2.2.2"
+  }
+}

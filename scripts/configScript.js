@@ -1,0 +1,73 @@
+var SLConfig = {
+    "current_user": {
+        "id": 544527,
+        "username": "bishoygad",
+        "name": "Bishoy Gad",
+        "description": null,
+        "thumbnail_url": "//graph.facebook.com/10153688769051186/picture",
+        "pro": false,
+        "team_id": null,
+        "settings": {
+            "id": 388400,
+            "present_controls": true,
+            "present_upsizing": true,
+            "present_notes": true,
+            "editor_grid": true,
+            "editor_snap": true,
+            "developer_mode": false,
+            "speaker_layout": null
+        },
+        "email": "bishoy.gad@hotmail.com",
+        "notify_on_receipt": true,
+        "billing_address": null,
+        "editor_tutorial_completed": true,
+        "manually_upgraded": false,
+        "deck_user_editor_limit": 1
+    },
+    "deck": {
+        "id": 779394,
+        "slug": "deck",
+        "title": "deck",
+        "description": "",
+        "visibility": "all",
+        "published_at": "2016-08-20T22:58:04.246Z",
+        "sanitize_messages": null,
+        "thumbnail_url": "https://s3.amazonaws.com/media-p.slid.es/thumbnails/3ddc766dfe45a1329dcef013e0712bae/thumb.jpg",
+        "view_count": 0,
+        "user": {
+            "id": 544527,
+            "username": "bishoygad",
+            "name": "Bishoy Gad",
+            "description": null,
+            "thumbnail_url": "//graph.facebook.com/10153688769051186/picture",
+            "pro": false,
+            "team_id": null,
+            "settings": {
+                "id": 388400,
+                "present_controls": true,
+                "present_upsizing": true,
+                "present_notes": true
+            }
+        },
+        "background_transition": "slide",
+        "transition": "slide",
+        "theme_id": null,
+        "theme_font": "montserrat",
+        "theme_color": "white-blue",
+        "auto_slide_interval": 10*60*1000,
+        "comments_enabled": true,
+        "forking_enabled": true,
+        "rolling_links": false,
+        "center": false,
+        "should_loop": true,
+        "share_notes": null,
+        "slide_number": null,
+        "rtl": false,
+        "version": 2,
+        "collaborative": null,
+        "deck_user_editor_limit": 1,
+        "data_updated_at": 1471734730815,
+        "access_token": "BpAfjoNnsimx7oBqcsDDvrBXgZ4r",
+        "notes": {}
+    }
+};

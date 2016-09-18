@@ -1,0 +1,27 @@
+{
+  "name": "KPI-Presentation",
+  "homepage": "https://github.com/YoussB/KPI-Presentation",
+  "authors": [
+    "YoussB <Bishoy.Youssef@emc.com>"
+  ],
+  "description": "an application for monitoring team KPIs in addition to other stuff.",
+  "main": "",
+  "keywords": [
+    "KPI",
+    "presentation"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reveal-js": "^2.6.2",
+    "jquery": "^3.1.0",
+    "jquery-ui": "^1.12.0"
+  }
+}
