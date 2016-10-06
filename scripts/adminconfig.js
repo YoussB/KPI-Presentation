@@ -109,7 +109,37 @@ var chartConfigurations = {
     //Leave label empty to hide
     xAxis: {
         label: "x label",
-        points: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+        points: ["01-Jul", 
+                 "02-Jul", 
+                 "03-Jul", 
+                 "04-Jul", 
+                 "05-Jul", 
+                 "06-Jul", 
+                 "07-Jul", 
+                 "08-Jul", 
+                 "09-Jul", 
+                 "10-Jul", 
+                 "11-Jul", 
+                 "12-Jul", 
+                 "13-Jul", 
+                 "14-Jul", 
+                 "15-Jul", 
+                 "16-Jul", 
+                 "17-Jul", 
+                 "18-Jul", 
+                 "19-Jul", 
+                 "20-Jul", 
+                 "21-Jul", 
+                 "22-Jul", 
+                 "23-Jul", 
+                 "24-Jul", 
+                 "25-Jul", 
+                 "26-Jul", 
+                 "27-Jul", 
+                 "28-Jul", 
+                 "29-Jul", 
+                 "30-Jul", 
+                 "31-Jul"],
     },
 
     //y-axis configurations
@@ -122,5 +152,5 @@ var chartConfigurations = {
     },
 
     //Data to be added Daily
-    data: [2, 4, 5, 2.3, 3.2, 5, 5.6]
+    data: [2, 4, 5, 2.3, 3.2, 5, 5.6, 4, 5, 2.3, 3.2, 5, 5.6, 4, 5, 2.3, 3.2, 5, 5.6, 4, 5, 2.3, 3.2, 5, 5.6, 3.2, 5, 5.6]
 };
