@@ -1,8 +1,17 @@
 adminSlide = function () {
     var flight = getNextflight();
     $('#remTime').text('00:00');
-    $('#flightNo').text(flight.name);
-    $('#flightArrival').text(flight.arrival);
+    if (flight.length == 1) {
+        $('#flightNo').text(flight[0].name);
+        $('#flightArrivalTemp').text(flight[0].arrival);
+        $('#flightArrival').hide();
+        $('#flightNoTemp').hide();
+    } else {
+        $('#flightNo').text(flight[0].name);
+        $('#flightNoTemp').text(flight[1].name);
+        $('#flightArrival').text(flight[0].arrival);
+        $('#flightArrivalTemp').hide();
+    }
     currentTimer = window.setInterval(timer, 1000);
 };
 
@@ -28,8 +37,17 @@ timer = function () {
             audio.currentTime = 0;
             var flight = getNextflight();
             $('#remTime').text('00:00');
-            $('#flightNo').text(flight.name);
-            $('#flightArrival').text(flight.arrival);
+            if (flight.length == 1) {
+                $('#flightNo').text(flight[0].name);
+                $('#flightArrivalTemp').text(flight[0].arrival);
+                $('#flightArrival').hide();
+                $('#flightNoTemp').hide();
+            } else {
+                $('#flightNo').text(flight[0].name);
+                $('#flightNoTemp').text(flight[1].name);
+                $('#flightArrival').text(flight[0].arrival);
+                $('#flightArrivalTemp').hide();
+            }
             var currentTimer = window.setInterval(timer, 1000);
         }, 20000);
     } else if (minutesToArrival < -2) {
@@ -55,17 +73,24 @@ function MillisecondsToDuration(n) {
 
 getNextflight = function () {
     var now = new Date(Date.now());
-    var current = -1;
+    var current = [];
     $.each(flights, function (index, value) {
-        var arrival = value.arrival.split(':');
-        arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
-        if (arrival.getTime() - now.getTime() > 0) {
-            current = value;
+        if (current.length < 1) {
+            var arrival = value.arrival.split(':');
+            arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
+            if (arrival.getTime() - now.getTime() > 0) {
+                current.push(value);
+            }
+        } else if (current[0].arrival == value.arrival) {
+            current.push(value);
             return false;
         }
     });
-    if (current == -1) {
-        current = flights[0];
+    if (current.length < 1) {
+        current.push(flights[0]);
+        if (flights[1].arrival == current[0].arrival) {
+            current.push(flights[0]);
+        }
     }
     return current;
 }
@@ -74,14 +99,18 @@ bosSlide = function () {
     //Chart Bootstrap
     var ctx = document.getElementById("chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
+    var remaining = 0;
     if ($('#tmPrgrs tr:first td:first').text() == 'Name') {
         $.each(resources, function (index, value) {
             var tempRow = $('<tr />').insertBefore($('#tmPrgrs tr:last'));
             console.log(value);
             tempRow.append($('<td />').text(value.name));
             tempRow.append($('<td />').text(value.remaining));
+            remaining += value.remaining;
         });
         $('#tmPrgrs tr:first').remove();
+        $('#totalAging').text(remaining);
+        $('#heldShips').text(heldShipments);
     }
 };
 

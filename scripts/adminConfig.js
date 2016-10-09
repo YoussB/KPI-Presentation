@@ -29,6 +29,8 @@ var resources = {
     }
 };
 
+var heldShipments = 190;
+
 var flights = {
     0: {
         id: 1,
