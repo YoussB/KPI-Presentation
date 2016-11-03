@@ -16,7 +16,7 @@ adminSlide = function () {
 };
 
 timer = function () {
-    var arrival = $('#flightArrival').text().split(':');
+    var arrival = $('#flightArrival').css('display') == 'none' ? $('#flightArrivalTemp').text().split(':') : $('#flightArrival').text().split(':');
     var now = new Date(Date.now());
     arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
     var minutesToArrival = (arrival.getTime() - now.getTime()) / 60000;
@@ -51,7 +51,7 @@ timer = function () {
             var currentTimer = window.setInterval(timer, 1000);
         }, 20000);
     } else if (minutesToArrival < -2) {
-        arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, arrival[0], arrival[1], 0, 0);
+        arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, arrival.getHours(), arrival.getMinutes(), 0, 0);
         var countDown = MillisecondsToDuration(arrival.getTime() - now.getTime());
         countDown = countDown.substring(2, countDown.length).split('.')[0];
         $('#remTime').text(countDown);
@@ -111,11 +111,22 @@ bosSlide = function () {
         $('#tmPrgrs tr:first').remove();
         $('#totalAging').text(remaining);
         $('#heldShips').text(heldShipments);
+        if (chartConfigurations.data[chartConfigurations.data.length - 1] >= chartConfigurations.threshold.value) {
+            $('#bosColor').css('background-color', 'green');
+        } else {
+            $('#bosColor').css('background-color', 'red');
+        }
     }
 };
 
 bayanSlide = function () {
-
+    $('#agentProgress').DataTable({
+        data: dtData,
+        columns: dtColumns,
+        ordering: false,
+        searching: false,
+        lengthChange: false
+    });
 };
 
 var randomScalingFactor = function () {
@@ -142,12 +153,12 @@ var config = {
             fill: false,
             borderDash: [5, 5],
         }, {
-                label: chartConfigurations.threshold.label,
-                data: perfectArr,
-                fill: false,
-                radius: 0,
-                backgroundColor: "rgba(0,0,0,0.1)"
-            }]
+            label: chartConfigurations.threshold.label,
+            data: perfectArr,
+            fill: false,
+            radius: 0,
+            backgroundColor: "rgba(0,0,0,0.1)"
+        }]
     },
     options: {
         responsive: true,
@@ -186,7 +197,21 @@ var config = {
     }
 };
 
+var dtColumns = [];
+$.each(agentsProgressResources, function (i, column) {
+    var temp = { 'title': column };
+    dtColumns.push(temp);
+});
 
+var dtData = [];
+$.each(agentsProgressData, function (i, value) {
+    var tempTotal = 0;
+    for (var i = 1; i < agentsProgressResources.length - 2; i++) {
+        tempTotal += value[i];
+    }
+    value[agentsProgressResources.length - 2] = tempTotal;
+    dtData.push(value);
+});
 
 $.each(config.data.datasets, function (i, dataset) {
     var background = randomColor(0.5);
