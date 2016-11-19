@@ -120,21 +120,23 @@ bosSlide = function () {
 };
 
 bayanSlide = function () {
-    $('#agentProgress').DataTable({
-        data: dtData,
-        columns: dtColumns,
-        ordering: false,
-        searching: false,
-        lengthChange: false,
-        footerCallback: function (tfoot, data, start, end, display) {
-            var api = this.api();
-            $(api.column(5).footer()).html(
-                api.column(5).data().reduce(function (a, b) {
-                    return a + b;
-                }, 0)
-            );
-        }
-    });
+    if (!$.fn.dataTable.isDataTable('#agentProgress')) {
+        $('#agentProgress').DataTable({
+            data: dtData,
+            columns: dtColumns,
+            ordering: false,
+            searching: false,
+            lengthChange: false,
+            footerCallback: function (tfoot, data, start, end, display) {
+                var api = this.api();
+                $(api.column(5).footer()).html(
+                    api.column(5).data().reduce(function (a, b) {
+                        return a + b;
+                    }, 0)
+                );
+            }
+        });
+    }
 };
 
 var randomScalingFactor = function () {
@@ -161,12 +163,12 @@ var config = {
             fill: false,
             borderDash: [5, 5],
         }, {
-                label: chartConfigurations.threshold.label,
-                data: perfectArr,
-                fill: false,
-                radius: 0,
-                backgroundColor: "rgba(0,0,0,0.1)"
-            }]
+            label: chartConfigurations.threshold.label,
+            data: perfectArr,
+            fill: false,
+            radius: 0,
+            backgroundColor: "rgba(0,0,0,0.1)"
+        }]
     },
     options: {
         responsive: true,
