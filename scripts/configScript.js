@@ -54,7 +54,7 @@ var SLConfig = {
         "theme_id": null,
         "theme_font": "montserrat",
         "theme_color": "white-blue",
-        "auto_slide_interval": 10*60*1000,
+        "auto_slide_interval": generalConfig.transitionTime*60*1000,
         "comments_enabled": true,
         "forking_enabled": true,
         "rolling_links": false,

@@ -1,4 +1,10 @@
-adminSlide = function () {
+var adminSlide = function () {
+    if (firstSlide.currentPercent >= firstSlide.thresholdPercent) {
+        $('#COAThreshold').css('background-color', 'green');
+    } else {
+        $('#COAThreshold').css('background-color', 'red');
+    }
+    $('#s1BoxValue').text(firstSlide.boxValue);
     var flight = getNextflight();
     $('#remTime').text('00:00');
     if (flight.length == 1) {
@@ -14,42 +20,86 @@ adminSlide = function () {
     }
     currentTimer = window.setInterval(timer, 1000);
 };
-
-timer = function () {
+var alarm1Playing, alarm2Playing;
+var timer = function () {
     var arrival = $('#flightArrival').css('display') == 'none' ? $('#flightArrivalTemp').text().split(':') : $('#flightArrival').text().split(':');
     var now = new Date(Date.now());
     arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate(), arrival[0], arrival[1], 0, 0);
     var minutesToArrival = (arrival.getTime() - now.getTime()) / 60000;
+    var zeroAlarm = null;
+    var firstAlarm = null;
+    var secondAlarm = null;
 
+    if (firstSlide.alarm1 == 0 || firstSlide.alarm2 == 0) {
+        var zeroAlarm = true;
+        var alarmFile = firstSlide.alarm1 == 0 ? firstSlide.alarm1File : firstSlide.alarm2File;
+    }
+    if (firstSlide.alarm1 > 0) {
+        var firstAlarm = firstSlide.alarm1;
+    }
+    if (firstSlide.alarm2 > 0) {
+        var secondAlarm = firstSlide.alarm2;
+    }
     if (minutesToArrival > 0) {
         var countDown = MillisecondsToDuration(arrival.getTime() - now.getTime());
         countDown = countDown.substring(2, countDown.length).split('.')[0];
         $('#remTime').text(countDown);
-
+        if (!alarm1Playing && firstAlarm && parseInt(minutesToArrival) == firstAlarm) {
+            alarm1Playing = true;
+            var audio = new Audio(firstSlide.alarm1File);
+            audio.play();
+            window.setTimeout(function () {
+                try {
+                    audio.pause();
+                } catch (ex) { }
+                try {
+                    audio.currentTime = 0;
+                } catch (ex) { }
+            }, 20000);
+        }
+        if (!alarm2Playing && secondAlarm && parseInt(minutesToArrival) == secondAlarm) {
+            alarm2Playing = true;
+            var audio = new Audio(firstSlide.alarm2File);
+            audio.play();
+            window.setTimeout(function () {
+                try {
+                    audio.pause();
+                } catch (ex) { }
+                try {
+                    audio.currentTime = 0;
+                } catch (ex) { }
+            }, 20000);
+        }
     } else if (minutesToArrival >= -1 && minutesToArrival <= 0) {
         if (currentTimer) {
             window.clearInterval(currentTimer);
         }
-        var audio = new Audio('audio/alarm.mp3');
-        audio.play();
-        window.setTimeout(function () {
-            audio.pause();
-            audio.currentTime = 0;
-            var flight = getNextflight();
-            $('#remTime').text('00:00');
-            if (flight.length == 1) {
-                $('#flightNo').text(flight[0].name);
-                $('#flightArrivalTemp').text(flight[0].arrival);
-                $('#flightArrival').hide();
-                $('#flightNoTemp').hide();
-            } else {
-                $('#flightNo').text(flight[0].name);
-                $('#flightNoTemp').text(flight[1].name);
-                $('#flightArrival').text(flight[0].arrival);
-                $('#flightArrivalTemp').hide();
-            }
-            var currentTimer = window.setInterval(timer, 1000);
-        }, 20000);
+        if (zeroAlarm) {
+            var audio = new Audio(alarmFile);
+            audio.play();
+            window.setTimeout(function () {
+                try {
+                    audio.pause();
+                } catch (ex) { }
+                try {
+                    audio.currentTime = 0;
+                } catch (ex) { }
+            }, 20000);
+        }
+        var flight = getNextflight();
+        $('#remTime').text('00:00');
+        if (flight.length == 1) {
+            $('#flightNo').text(flight[0].name);
+            $('#flightArrivalTemp').text(flight[0].arrival);
+            $('#flightArrival').hide();
+            $('#flightNoTemp').hide();
+        } else {
+            $('#flightNo').text(flight[0].name);
+            $('#flightNoTemp').text(flight[1].name);
+            $('#flightArrival').text(flight[0].arrival);
+            $('#flightArrivalTemp').hide();
+        }
+        var currentTimer = window.setInterval(timer, 1000);
     } else if (minutesToArrival < -2) {
         arrival = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, arrival.getHours(), arrival.getMinutes(), 0, 0);
         var countDown = MillisecondsToDuration(arrival.getTime() - now.getTime());
@@ -71,9 +121,10 @@ function MillisecondsToDuration(n) {
     return hms;
 }
 
-getNextflight = function () {
+var getNextflight = function () {
     var now = new Date(Date.now());
     var current = [];
+    var flights = firstSlide.events;
     $.each(flights, function (index, value) {
         if (current.length < 1) {
             var arrival = value.arrival.split(':');
@@ -95,11 +146,15 @@ getNextflight = function () {
     return current;
 }
 
-bosSlide = function () {
+var bosSlide = function () {
     //Chart Bootstrap
+    $('#s2BoxTitle').text(secondSlide.boxTitle);
+    $('#s2Caption').text(secondSlide.captionData);
+    $('#heldShips').text(secondSlide.BoxValue);
     var ctx = document.getElementById("chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
     var remaining = 0;
+    var resources = secondSlide.resources;
     if ($('#tmPrgrs tr:first td:first').text() == 'Name') {
         $.each(resources, function (index, value) {
             var tempRow = $('<tr />').insertBefore($('#tmPrgrs tr:last'));
@@ -110,8 +165,7 @@ bosSlide = function () {
         });
         $('#tmPrgrs tr:first').remove();
         $('#totalAging').text(remaining);
-        $('#heldShips').text(heldShipments);
-        if (chartConfigurations.data[chartConfigurations.data.length - 1] >= chartConfigurations.threshold.value) {
+        if (chartConfigurations.data[chartConfigurations.data.length - 1] < chartConfigurations.threshold.value) {
             $('#bosColor').css('background-color', 'green');
         } else {
             $('#bosColor').css('background-color', 'red');
@@ -119,7 +173,7 @@ bosSlide = function () {
     }
 };
 
-bayanSlide = function () {
+var bayanSlide = function () {
     if (!$.fn.dataTable.isDataTable('#agentProgress')) {
         $('#agentProgress').DataTable({
             data: dtData,
@@ -138,7 +192,74 @@ bayanSlide = function () {
         });
     }
 };
+var bayanAgentProgressNew = function () {
+    $('#s4TopBoxTitle').text(fourthSlide.topBoxTitle);
+    $('#s4TopBoxText').text(fourthSlide.topBoxValue);
+    $('#s4BottomBoxTitle').text(fourthSlide.bottomBoxTitle);
+    $('#s4BottomBoxText').text(fourthSlide.bottomBoxValue);
+    var barChartConfigurations = fourthSlide.chartConfigurations;
+    barChartConfigurations.xAxis.points = [];
+    var barDataArray = [];
+    var max = 0;
+    $.each(barChartConfigurations.data, function (key, value) {
+        barChartConfigurations.xAxis.points.push(key);
+        barDataArray.push(value);
+        max = value > max ? value : max;
+    });
 
+    barChartConfigurations.data = barDataArray;
+    barChartConfigurations.yAxis.max = barChartConfigurations.yAxis.max > max ? barChartConfigurations.yAxis.max : max + barChartConfigurations.yAxis.step;
+    var barConfig = {
+        type: 'bar',
+        data: {
+            labels: barChartConfigurations.xAxis.points,
+            datasets: [{
+                label: barChartConfigurations.chartLabel,
+                data: barChartConfigurations.data,
+                //fill: true,
+                borderDash: [5, 5],
+                backgroundColor: "rgba(0,0,0,0.8)"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'bottom',
+            },
+            hover: {
+                mode: 'label'
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: barChartConfigurations.xAxis.label
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: barChartConfigurations.yAxis.label
+                    },
+                    ticks: {
+                        max: barChartConfigurations.yAxis.max,
+                        min: barChartConfigurations.yAxis.min,
+                        stepSize: barChartConfigurations.yAxis.step
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: 'BOS'
+            }
+        }
+    };
+    var ctx = document.getElementById("barChart").getContext("2d");
+    window.myLine = new Chart(ctx, barConfig);
+};
 var randomScalingFactor = function () {
     return Math.round(Math.random() * 4);//* (Math.random() > 0.5 ? -1 : 1));
 };
@@ -150,9 +271,12 @@ var randomColor = function (opacity) {
 };
 
 var perfectArr = [];
+var chartConfigurations = secondSlide.chartConfigurations;
 $.each(chartConfigurations.xAxis.points, function (i, label) {
     perfectArr.push(chartConfigurations.threshold.value);
 });
+
+
 var config = {
     type: 'line',
     data: {
@@ -162,12 +286,13 @@ var config = {
             data: chartConfigurations.data,
             fill: false,
             borderDash: [5, 5],
+            backgroundColor: "rgba(0,0,0,0.8)"
         }, {
             label: chartConfigurations.threshold.label,
             data: perfectArr,
             fill: false,
             radius: 0,
-            backgroundColor: "rgba(0,0,0,0.1)"
+            backgroundColor: "rgba(255,0,0,0.8)"
         }]
     },
     options: {
@@ -208,6 +333,8 @@ var config = {
 };
 
 var dtColumns = [];
+var agentsProgressResources = thirdSlide.agentsProgressResources;
+var agentsProgressData = thirdSlide.agentsProgressData;
 $.each(agentsProgressResources, function (i, column) {
     var temp = { 'title': column };
     dtColumns.push(temp);
@@ -224,10 +351,11 @@ $.each(agentsProgressData, function (i, value) {
 });
 
 $.each(config.data.datasets, function (i, dataset) {
-    var background = randomColor(0.5);
-    dataset.borderColor = background;
-    dataset.backgroundColor = background;
-    dataset.pointBorderColor = background;
-    dataset.pointBackgroundColor = background;
-    dataset.pointBorderWidth = 1;
+    var background = 'rgba(0,0,0,0.6)';
+    if (dataset.backgroundColor) {
+        dataset.borderColor = dataset.backgroundColor;
+        dataset.backgroundColor = dataset.backgroundColor;
+        dataset.pointBorderColor = dataset.backgroundColor;
+        dataset.pointBorderWidth = 1;
+    }
 });

@@ -54,11 +54,11 @@
 				</div>
 				<div data-block-id="125925cd570c6d2618c5943f5d633135" style="height: auto; min-width: 30px; min-height: 30px; width: 204px; left: 714px; top: 70px;"
 					data-block-type="text" class="sl-block">
-					<div style="z-index: 14; border-style: solid; border-width: 7px; border-radius: 35px; background-color: rgb(255, 217, 102);"
+					<div id="COAThreshold" style="z-index: 14; border-style: solid; border-width: 7px; border-radius: 35px; background-color: rgb(255, 217, 102);"
 						data-placeholder-text="Text" data-placeholder-tag="p" class="sl-block-content">
 						<p> </p>
 
-						<h1>COA</h1>
+						<h1 id="s1BoxValue">COA</h1>
 
 						<p> </p>
 					</div>
@@ -120,19 +120,19 @@
 				<div style="height: auto; width: 265px; left: 188px; top: 570px;" data-block-type="text" class="sl-block" data-block-id="404cf58e5a9f0f0ac4c2bbae56654fe9">
 					<div id="bosColor" style="z-index: 13; padding: 17px; border-style: solid; border-radius: 15px; border-width: 2px; background-color: rgb(0, 255, 0);"
 						data-placeholder-text="Text" data-placeholder-tag="p" class="sl-block-content">
-						<p><span style="font-size:0.5em">  </span><strong><span style="font-size:1.2em">BOS</span></strong></p>
+						<p><span style="font-size:0.5em">  </span><strong><span style="font-size:1.2em" id="s2Caption">BOS</span></strong></p>
 					</div>
 				</div>
-				<div style="height: auto; width: 312px; left: 648px; top: 0px;" data-block-type="text" class="sl-block" data-block-id="27a085022be54d64bc51b7ede5a086a1">
+				<div style="height: auto; width: 312px; left: 648px; top: -20px;" data-block-type="text" class="sl-block" data-block-id="27a085022be54d64bc51b7ede5a086a1">
 					<div style="z-index: 14; border-style: solid; border-width: 3px; border-radius: 26px; background-color: rgba(0, 0, 0, 0);"
 						data-placeholder-text="Text" data-placeholder-tag="p" class="sl-block-content">
-						<p><span style="font-size:1.2em">Held Shipments</span></p>
+						<p style="margin-bottom: 0;"><span style="font-size:1.2em" id="s2BoxTitle">Held Shipments</span></p>
 
 						<p><span style="font-size:1.4em"><strong id="heldShips">000</strong></span></p>
 					</div>
 				</div>
 
-				<div class="sl-block" data-block-type="table" style="height: auto; min-width: 120px; min-height: 30px; width: 304px; left: 648px; top: 140px;"
+				<div class="sl-block" data-block-type="table" style="font-size: 80%; height: auto; min-width: 120px; min-height: 30px; width: 304px; left: 648px; top: 135px;"
 					data-block-id="ead0130b9530a4353bedbaaaee69a922">
 					<div class="sl-block-content" style="z-index: 15;" data-table-cols="2" data-table-rows="2" data-table-has-header="false">
 						<table id="tmPrgrs">
@@ -142,7 +142,7 @@
 									<td>0</td>
 								</tr>
 								<tr>
-									<td style="width: 204px;"><strong>Total # aging</strong></td>
+									<td style="width: 204px; font-size: 78%;"><strong>Total # aging</strong></td>
 									<td id="totalAging">0</td>
 								</tr>
 							</tbody>
@@ -172,42 +172,75 @@
 
 
 				<div class="sl-block" data-block-type="table" style="height: auto; width: 960px; left: 0px; top: 0px;" data-block-id="75e51e7e9159403e95a3248428335294">
-					<div class="sl-block-content" style="z-index: 15; text-align: left; font-size: 13.5pt" data-table-cols="4" data-table-rows="3" data-table-has-header="false">
+					<div class="sl-block-content" style="z-index: 15; text-align: left; font-size: 13.5pt" data-table-cols="4" data-table-rows="3"
+						data-table-has-header="false">
 						<table id="agentProgress">
-							<!--<tbody>
-								<tr>
-									<td style="width: 195px;"><strong>Total</strong></td>
-									<td style="width: 590px;">0</td>
-									<td style="width: 88px;"></td>
-									<td></td>
-								</tr>
-								<tr>
-									<td style="width: 195px;"></td>
-									<td style="width: 590px;">Name</td>
-									<td style="width: 88px;">Total</td>
-									<td>Error</td>
-								</tr>
-								<tr>
-									<td>date</td>
-									<td style="width: 590px;"></td>
-									<td style="width: 88px;"></td>
-									<td></td>
-								</tr>
-							</tbody>-->
 						</table>
 					</div>
 				</div>
 			</section>
 			<!--End Slide 3-->
+			<!--Start Slide 4-->
+			<section data-id="dff2a7eb89b17dc68ae8b0810a352f0a" data-state="bayanAgentProgressNew">
+				<div style="width: 640px; height: 610px; left: 0px; top: 0px;" data-block-type="shape" class="sl-block" data-block-id="b28556e04bd266f76c880277e6c0cabe">
+					<div data-shape-stroke-width="3" data-shape-stroke-color="#000000" style="z-index: 11;" data-shape-stretch="true" data-shape-fill-color="rgba(0, 0, 0, 0)"
+						data-shape-type="rect" class="sl-block-content" href="">
+						<div style="position: absolute; width: 97%; left: 5px; height:100%;">
+							<canvas id="barChart"></canvas>
+						</div>
+						<svg viewbox="0 0 640 549" preserveaspectratio="none" height="100%" width="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+							<defs>
+								<clippath id="shape-mask-51-1473207484897">
+									<rect width="640" height="549"></rect>
+								</clippath>
+							</defs>
+							<rect width="640" height="549" clip-path="url(#shape-mask-51-1473207484897)" class="shape-element" fill="rgba(0, 0, 0, 0)"
+								stroke="#000000" stroke-width="6"></rect>
+						</svg>
+					</div>
+				</div>
+				<div style="width: 960px; height: 150.6px; left: 0px; top: 549.4px;" data-block-type="image" class="sl-block" data-block-id="34ad42ffe9b1d3ffdfcaf91eb8665715">
+					<div style="z-index: 12;" class="sl-block-content"><img data-natural-height="251" data-natural-width="1600" style="" data-src="./images/slideFooter.png"></div>
+				</div>
+				<!--<div style="height: auto; width: 265px; left: 188px; top: 570px;" data-block-type="text" class="sl-block" data-block-id="404cf58e5a9f0f0ac4c2bbae56654fe9">
+					<div id="bosColor" style="z-index: 13; padding: 17px; border-style: solid; border-radius: 15px; border-width: 2px; background-color: rgb(0, 255, 0);"
+						data-placeholder-text="Text" data-placeholder-tag="p" class="sl-block-content">
+						<p><span style="font-size:0.5em">  </span><strong><span style="font-size:1.2em" id="s2Caption">BOS</span></strong></p>
+					</div>
+				</div>-->
+				<div style="height: auto; width: 312px; left: 648px; top: 0px;" data-block-type="text" class="sl-block" data-block-id="27a085022be54d64bc51b7ede5a086a1">
+					<div style="z-index: 14; border-style: solid; border-width: 3px; border-radius: 26px; background-color: red;" data-placeholder-text="Text"
+						data-placeholder-tag="p" class="sl-block-content">
+						<p style="margin-bottom: 0;"><span style="font-size:1.2em" id="s4TopBoxTitle">Held Shipments balalalalalla</span></p>
+
+						<p><span style="font-size:1.4em"><strong id="s4TopBoxText">000</strong></span></p>
+					</div>
+				</div>
+
+				<div style="height: auto; width: 312px; left: 648px; top: 35%;" data-block-type="text" class="sl-block" data-block-id="27a085022be54d64bc51b7ede5a086a1">
+					<div style="z-index: 14; border-style: solid; border-color: green; border-width: 3px; border-radius: 26px; background-color: rgba(0, 0, 0, 0);"
+						data-placeholder-text="Text" data-placeholder-tag="p" class="sl-block-content">
+						<p style="margin-bottom: 0;"><span style="font-size:1.4em"><strong id="s4BottomBoxTitle">000</strong></span></p>
+						<p><span style="font-size:1.1em" id="s4BottomBoxText">Held Shipments balalalalalla</span></p>
+					</div>
+				</div>
+				<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 640px; left: 0px; top: 0px;"
+					data-block-id="c4d0839f9cb2943ee8c669c1c19f6cd9">
+					<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; padding: 10px;">
+
+					</div>
+				</div>
+			</section>
+			<!--End Slide 4-->
 		</div>
 	</div>
+	<script src="./adminConfig.js"></script>
 	<script src="./scripts/configScript.js"></script>
 	<script src="./scripts/lib1.js"></script>
 	<script src="./scripts/lib2.js"></script>
 	<script src="./vendor/chart.bundle.min.js"></script>
 	<script src="./vendor/jquery.min.js"></script>
 	<script src="./vendor/jquery.dataTables.min.js"></script>
-	<script src="./scripts/adminConfig.js"></script>
 	<script src="./scripts/app.js"></script>
 	<script src="./scripts/revealConfig.js"></script>
 </body>
