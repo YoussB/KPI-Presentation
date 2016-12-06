@@ -253,7 +253,7 @@ var bayanAgentProgressNew = function () {
             },
             title: {
                 display: true,
-                text: 'BOS'
+                text: barChartConfigurations.chartLabel
             }
         }
     };
@@ -327,7 +327,7 @@ var config = {
         },
         title: {
             display: true,
-            text: 'BOS'
+            text: chartConfigurations.chartLabel
         }
     }
 };

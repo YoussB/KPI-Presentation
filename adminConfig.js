@@ -156,7 +156,7 @@ var secondSlide = {
         //Legend is shown above the chart
         legend: "Chart Legend",
         //Label is shown below the chart
-        chartLabel: "Help Shipment KPI",
+        chartLabel: "Chart Label",
         //line threshold
         threshold: {
             value: 4.7,
@@ -241,7 +241,7 @@ var fourthSlide = {
         //Legend is shown above the chart
         legend: "Chart Legend",
         //Label is shown below the chart
-        chartLabel: "Help Shipment KPI",
+        chartLabel: "Bar Chart Label",
         //Data to be added Daily
         //You can use simple math in the data like the first one
         data: {
